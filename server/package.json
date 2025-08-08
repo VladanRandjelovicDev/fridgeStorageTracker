@@ -2,16 +2,19 @@
   "name": "fridge-server",
   "version": "1.0.0",
   "description": "Local server for fridgeStorageTracker app",
-  "main": "server.js",
+  "main": "fridgeAPI.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node fridgeAPI.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "body-parser": "^1.20.2",
-    "uuid": "^9.0.0",
-    "fs-extra": "^11.1.1"
-  }
+    "express": "^4.21.2",
+    "fs-extra": "^11.1.1",
+    "uuid": "^9.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

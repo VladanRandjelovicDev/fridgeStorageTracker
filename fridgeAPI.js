@@ -14,9 +14,8 @@ app.use(bodyParser.json());
 // Utility: Load data from file
 async function loadData() {
   try {
-    const data = await fs.readJson(DB_FILE);
-    return data;
-  } catch (err) {
+    return await fs.readJson(DB_FILE);
+  } catch {
     return [];
   }
 }
@@ -28,7 +27,9 @@ async function saveData(data) {
 
 // GET all items
 app.get('/items', async (req, res) => {
-  const items = await loadData();
+  let items = await loadData();
+  // Sortiranje po roku trajanja
+  items.sort((a, b) => new Date(a.bestBefore) - new Date(b.bestBefore));
   res.json(items);
 });
 
