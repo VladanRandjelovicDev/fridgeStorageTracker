@@ -1,55 +1,101 @@
 import express from 'express';
-import cors from 'cors';
 import bodyParser from 'body-parser';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs-extra';
+import path from 'path';
 
 const app = express();
-const PORT = 3000;
+const PORT = 3100;
 const DB_FILE = './db.json';
 
-app.use(cors());
-app.use(bodyParser.json());
+const CATEGORIES = ["fruit", "vegetable", "meat", "dairy", "grain", "other"];
 
-async function loadData() {
-  try {
-    const data = await fs.readJson(DB_FILE);
-    return data;
-  } catch (error) {
-    console.error("Error reading DB file:", error);
-    return [];
-  }
+// Middleware
+app.use(express.json());
+
+// Helper: Read DB
+function readDB() {
+    if (!fs.existsSync(DB_FILE)) {
+        fs.writeFileSync(DB_FILE, JSON.stringify({ items: [] }, null, 2));
+    }
+    return JSON.parse(fs.readFileSync(DB_FILE, "utf8"));
 }
 
-async function saveData(data) {
-  try {
-    await fs.writeJson(DB_FILE, data, { spaces: 2 });
-  } catch (error) {
-    console.error("Error writing DB file:", error);
-  }
+// Helper: Write DB
+function writeDB(data) {
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
-// DELETE item endpoint
-app.delete('/items/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    let items = await loadData();
+// Fetch all items for a specific user
+app.get("/items/:userId", (req, res) => {
+    const { userId } = req.params;
+    const db = readDB();
+    const userItems = db.items.filter(item => item.userId === userId);
+    res.json(userItems);
+});
 
-    const initialLength = items.length;
-    items = items.filter(item => item.id !== id);
+// Fetch a single item by ID
+app.get("/items/:id", (req, res) => {
+    const db = readDB();
+    const item = db.items.find(i => i.id === req.params.id);
+    if (!item) return res.status(404).json({ error: "Item not found" });
+    res.json(item);
+});
 
-    if (items.length === initialLength) {
-      return res.status(404).json({ error: "Item not found" });
+// Create new item
+app.post("/items", (req, res) => {
+    const { userId, name, category, bestBefore, dateStored } = req.body;
+
+    if (!userId || !name || !category || !bestBefore || !dateStored) {
+        return res.status(400).json({ error: "Missing required fields" });
     }
 
-    await saveData(items);
-    res.status(204).send();
-  } catch (error) {
-    console.error("Error in DELETE /items/:id:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+    if (!CATEGORIES.includes(category)) {
+        return res.status(400).json({ error: "Invalid category" });
+    }
+
+    const db = readDB();
+    const newItem = {
+        id: uuidv4(),
+        userId,
+        name,
+        category,
+        bestBefore,
+        dateStored
+    };
+
+    db.items.push(newItem);
+    writeDB(db);
+    res.status(201).json(newItem);
+});
+
+// Update by ID (partial update)
+app.put("/items/:id", (req, res) => {
+    const db = readDB();
+    const itemIndex = db.items.findIndex(i => i.id === req.params.id.toLowerCase());
+    if (itemIndex === -1) return res.status(404).json({ error: "Item not found" });
+
+    const updates = req.body;
+    if (updates.category && !CATEGORIES.includes(updates.category)) {
+        return res.status(400).json({ error: "Invalid category" });
+    }
+
+    db.items[itemIndex] = { ...db.items[itemIndex], ...updates };
+    writeDB(db);
+    res.json(db.items[itemIndex]);
+});
+
+// Delete by ID
+app.delete("/items/:id", (req, res) => {
+    const db = readDB();
+    const itemIndex = db.items.findIndex(i => i.id === req.params.id.toLowerCase());
+    if (itemIndex === -1) return res.status(404).json({ error: "Item not found" });
+
+    const deletedItem = db.items.splice(itemIndex, 1);
+    writeDB(db);
+    res.json(deletedItem[0]);
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
