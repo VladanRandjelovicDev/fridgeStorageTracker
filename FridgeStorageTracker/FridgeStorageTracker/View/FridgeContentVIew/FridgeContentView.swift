@@ -70,13 +70,48 @@ struct FridgeContentView: View {
                 VStack(alignment: .leading) {
                     Text(item.title)
                         .font(.title)
-                    Text("Added on \(item.storedDate), expires in: \(item.expiresInDays)")
+                    Text(expiryInfoText(for: item))
                         .font(.caption)
                 }
+				 .padding()
+				 .background(backgroundColor(for: item))
+				 .cornerRadius(8)
+				 .opacity(opacityForItem(item))
             }
             .onDelete(perform: deleteItem)
         }
     }
+	
+	private func expiryInfoText(for item: FoodItemViewData) -> String {
+		if let daysLeft = Int(item.expiresInDays) {
+			if daysLeft < 0 {
+				return "Added on \(item.storedDate), expired"
+			} else if daysLeft == 0 {
+				return "Added on \(item.storedDate), expires today"
+			} else {
+				return "Added on \(item.storedDate), expires in: \(daysLeft) days"
+			}
+		}
+		return "Added on \(item.storedDate), no expiry info"
+	}
+	
+	private func backgroundColor(for item: FoodItemViewData) -> Color {
+		if let daysLeft = Int(item.expiresInDays) {
+			if daysLeft < 0 {
+				return Color.red.opacity(0.2)    // expired
+			} else if daysLeft <= 3 {
+				return Color.yellow.opacity(0.2) // near expiry
+			}
+		}
+		return Color.clear
+	}
+
+	private func opacityForItem(_ item: FoodItemViewData) -> Double {
+		if let daysLeft = Int(item.expiresInDays), daysLeft < 0 {
+			return 0.6 // faded for expired
+		}
+		return 1.0
+	}
 
     private func sort(by option: FridgeContentViewState.SortByType) {
         viewModel.sortBy(option)
