@@ -67,20 +67,43 @@ struct FridgeContentView: View {
     var fridgeItems: some View {
         List {
             ForEach(viewState.foodItems, id: \.self) { item in
-                VStack(alignment: .leading) {
-                    Text(item.title)
-                        .font(.title)
-                    Text(expiryInfoText(for: item))
-                        .font(.caption)
-                }
-				 .padding()
-				 .background(backgroundColor(for: item))
-				 .cornerRadius(8)
-				 .opacity(opacityForItem(item))
-            }
-            .onDelete(perform: deleteItem)
+				HStack(alignment: .top, spacing: 12) {
+					Image(systemName: iconName(for: item))
+						.font(.title2)
+						.foregroundColor(expiryTextColor(for: item))
+					VStack(alignment: .leading) {
+						Text(item.title)
+							.font(.title)
+						Text(expiryInfoText(for: item))
+							.font(.caption)
+					}
+				}
+					 .padding()
+					 .background(backgroundColor(for: item))
+					 .cornerRadius(8)
+					 .opacity(opacityForItem(item))
+			}
+			.onDelete(perform: deleteItem)
         }
     }
+	
+	private func iconName(for item: FoodItemViewData) -> String {
+		switch item.category.lowercased() {
+		case "meat":
+			return "steak" // iOS 17+, shows a piece of meat
+		case "fruit":
+			return "apple.logo" // classic apple icon
+		case "dairy":
+			return "cup.and.saucer.fill" // cup of milk/tea
+		case "vegetables":
+			return "carrot" // or "leaf.fill" if carrot isn't available
+		case "grain":
+			return "bag.fill" // resembles a sack of grain/flour
+		default:
+			return "fork.knife" // fallback for unknown categories
+		}
+	}
+
 	
 	private func expiryInfoText(for item: FoodItemViewData) -> String {
 		if let daysLeft = Int(item.expiresInDays) {
