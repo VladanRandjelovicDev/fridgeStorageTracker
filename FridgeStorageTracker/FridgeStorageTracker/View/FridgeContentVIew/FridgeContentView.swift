@@ -87,7 +87,7 @@ struct FridgeContentView: View {
         }
     }
 	
-	private func iconName(for item: FoodItemViewData) -> String {
+	private func iconName(for item: FoodItem) -> String {
 		switch item.category.lowercased() {
 		case "meat":
 			return "steak" // iOS 17+, shows a piece of meat
@@ -105,7 +105,7 @@ struct FridgeContentView: View {
 	}
 
 	
-	private func expiryInfoText(for item: FoodItemViewData) -> String {
+	private func expiryInfoText(for item: FoodItem) -> String {
 		if let daysLeft = Int(item.expiresInDays) {
 			if daysLeft < 0 {
 				return "Added on \(item.storedDate), expired"
@@ -118,7 +118,7 @@ struct FridgeContentView: View {
 		return "Added on \(item.storedDate), no expiry info"
 	}
 	
-	private func backgroundColor(for item: FoodItemViewData) -> Color {
+	private func backgroundColor(for item: FoodItem) -> Color {
 		if let daysLeft = Int(item.expiresInDays) {
 			if daysLeft < 0 {
 				return Color.red.opacity(0.2)    // expired
@@ -129,7 +129,7 @@ struct FridgeContentView: View {
 		return Color.clear
 	}
 
-	private func opacityForItem(_ item: FoodItemViewData) -> Double {
+	private func opacityForItem(_ item: FoodItem) -> Double {
 		if let daysLeft = Int(item.expiresInDays), daysLeft < 0 {
 			return 0.6 // faded for expired
 		}
