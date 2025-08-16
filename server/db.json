@@ -1,5 +1,28 @@
 {
   "items": [
-    
+    {
+      "id": "a222c5d7-f188-4b77-9f5b-b81b6d0da343",
+      "userId": "738BBAAE-7CB6-434D-A719-202FF47B89E1",
+      "name": "Eggs",
+      "category": "other",
+      "bestBefore": "2025-08-15T13:06:15Z",
+      "dateStored": "2025-08-13T13:06:00Z"
+    },
+    {
+      "id": "c8b0b2c9-745a-4009-b8cb-2745a708ef64",
+      "userId": "738BBAAE-7CB6-434D-A719-202FF47B89E1",
+      "name": "Apples",
+      "category": "fruit",
+      "bestBefore": "2025-08-15T13:06:48Z",
+      "dateStored": "2025-08-17T13:06:00Z"
+    },
+    {
+      "id": "10b0ca4e-6552-4311-afd8-6bfdde13d6ad",
+      "userId": "738BBAAE-7CB6-434D-A719-202FF47B89E1",
+      "name": "Pear",
+      "category": "fruit",
+      "bestBefore": "2025-08-15T14:02:40Z",
+      "dateStored": "2025-08-15T14:02:40Z"
+    }
   ]
 }

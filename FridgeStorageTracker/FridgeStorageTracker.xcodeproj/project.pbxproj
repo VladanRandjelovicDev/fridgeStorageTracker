@@ -29,9 +29,22 @@
 		30F6B76F2E43AE6B0006D52C /* FridgeStorageTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FridgeStorageTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A3F1E6D12E4F66B8004B7CA1 /* Exceptions for "FridgeStorageTracker" folder in "FridgeStorageTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 30F6B74F2E43AE6A0006D52C /* FridgeStorageTracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		30F6B7522E43AE6A0006D52C /* FridgeStorageTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A3F1E6D12E4F66B8004B7CA1 /* Exceptions for "FridgeStorageTracker" folder in "FridgeStorageTracker" target */,
+			);
 			path = FridgeStorageTracker;
 			sourceTree = "<group>";
 		};
@@ -398,6 +411,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"FridgeStorageTracker/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FridgeStorageTracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -426,6 +440,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"FridgeStorageTracker/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FridgeStorageTracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

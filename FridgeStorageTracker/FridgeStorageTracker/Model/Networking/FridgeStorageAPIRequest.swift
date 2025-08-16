@@ -1,7 +1,7 @@
 import Foundation
 
 private struct Constants {
-    static let baseUrl = URL(string: "http://localhost:3100")!
+    static let baseUrl = URL(string: "http://127.0.0.1:3785")!
 }
 
 enum FridgeStorageAPIRequest: APIRequest {

@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import path from 'path';
 
 const app = express();
-const PORT = 3100;
+const PORT = 3785;
 const DB_FILE = './db.json';
 
 const CATEGORIES = ["fruit", "vegetable", "meat", "dairy", "grain", "other"];
@@ -97,5 +97,5 @@ app.delete("/items/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://127.0.0.1:${PORT}`);
 });

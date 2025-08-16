@@ -16,12 +16,14 @@ extension FridgeContentViewState {
     struct FoodItemViewState: Equatable, Hashable {
         let id: UUID
         let title: String
+        let category: FoodItemCategory
         let storedDate: String
-        let expiresInDays: Int
+        let expiresInDays: Int?
 
         init(foodItem: FoodItem) {
             id = foodItem.id
             title = foodItem.name
+            category = foodItem.category
             storedDate = foodItem.dateStored.formatted()
             expiresInDays = Int(foodItem.bestBefore.distance(to: foodItem.dateStored) / 86400)
         }

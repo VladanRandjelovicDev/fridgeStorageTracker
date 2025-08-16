@@ -23,3 +23,17 @@ struct FoodItem: Identifiable, Codable, Equatable {
         item.dateStored = dateStored
     }
 }
+
+extension FoodItem {
+    init(id: UUID = UUID(),
+         name: String,
+         category: FoodItemCategory,
+         bestBefore: Date,
+         dateStored: Date) {
+        self.id = id
+        self.name = name
+        self.category = category
+        self.bestBefore = bestBefore
+        self.dateStored = dateStored
+    }
+}

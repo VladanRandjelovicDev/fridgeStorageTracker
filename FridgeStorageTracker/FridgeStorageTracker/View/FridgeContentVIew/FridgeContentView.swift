@@ -68,9 +68,13 @@ struct FridgeContentView: View {
         List {
             ForEach(viewState.foodItems, id: \.self) { item in
 				HStack(alignment: .top, spacing: 12) {
-					Image(systemName: iconName(for: item))
-						.font(.title2)
-						.foregroundColor(expiryTextColor(for: item))
+                    if item.category == .meat {
+                        Image("meat")
+                            .font(.title2)
+                    } else {
+                        Image(systemName: iconName(for: item))
+                            .font(.title2)
+                    }
 					VStack(alignment: .leading) {
 						Text(item.title)
 							.font(.title)
@@ -87,17 +91,17 @@ struct FridgeContentView: View {
         }
     }
 	
-	private func iconName(for item: FoodItem) -> String {
-		switch item.category.lowercased() {
-		case "meat":
+	private func iconName(for item: FridgeContentViewState.FoodItemViewState) -> String {
+		switch item.category {
+        case .meat:
 			return "steak" // iOS 17+, shows a piece of meat
-		case "fruit":
+        case .fruit:
 			return "apple.logo" // classic apple icon
-		case "dairy":
+        case .dairy:
 			return "cup.and.saucer.fill" // cup of milk/tea
-		case "vegetables":
+        case .vegetable:
 			return "carrot" // or "leaf.fill" if carrot isn't available
-		case "grain":
+        case .grain:
 			return "bag.fill" // resembles a sack of grain/flour
 		default:
 			return "fork.knife" // fallback for unknown categories
@@ -105,34 +109,42 @@ struct FridgeContentView: View {
 	}
 
 	
-	private func expiryInfoText(for item: FoodItem) -> String {
-		if let daysLeft = Int(item.expiresInDays) {
-			if daysLeft < 0 {
-				return "Added on \(item.storedDate), expired"
-			} else if daysLeft == 0 {
-				return "Added on \(item.storedDate), expires today"
-			} else {
-				return "Added on \(item.storedDate), expires in: \(daysLeft) days"
-			}
-		}
+	private func expiryInfoText(for item: FridgeContentViewState.FoodItemViewState) -> String {
+		
+        if let daysLeft = item.expiresInDays {
+            let expiresInDays = Int(daysLeft)
+                if expiresInDays < 0 {
+                    return "Added on \(item.storedDate), expired"
+                } else if expiresInDays == 0 {
+                    return "Added on \(item.storedDate), expires today"
+                } else {
+                    return "Added on \(item.storedDate), expires in: \(expiresInDays) days"
+                }
+
+        }
 		return "Added on \(item.storedDate), no expiry info"
 	}
 	
-	private func backgroundColor(for item: FoodItem) -> Color {
-		if let daysLeft = Int(item.expiresInDays) {
-			if daysLeft < 0 {
+	private func backgroundColor(for item: FridgeContentViewState.FoodItemViewState) -> Color {
+        if let daysLeft = item.expiresInDays {
+            let expiresInDays = Int(daysLeft)
+			if expiresInDays < 0 {
 				return Color.red.opacity(0.2)    // expired
-			} else if daysLeft <= 3 {
+			} else if expiresInDays <= 3 {
 				return Color.yellow.opacity(0.2) // near expiry
 			}
 		}
 		return Color.clear
 	}
 
-	private func opacityForItem(_ item: FoodItem) -> Double {
-		if let daysLeft = Int(item.expiresInDays), daysLeft < 0 {
-			return 0.6 // faded for expired
-		}
+	private func opacityForItem(_ item: FridgeContentViewState.FoodItemViewState) -> Double {
+        
+        if let daysLeft = item.expiresInDays {
+            let expiresInDays = Int(daysLeft)
+            if daysLeft < 0 {
+                return 0.6 // faded for expired
+            }
+        }
 		return 1.0
 	}
 
